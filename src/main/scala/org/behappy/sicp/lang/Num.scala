@@ -3,16 +3,20 @@ package org.behappy.sicp.lang
 import java.util.concurrent.ThreadLocalRandom
 import scala.annotation.{tailrec, targetName}
 import scala.language.implicitConversions
+import scala.math.BigDecimal.RoundingMode
 
 opaque type Num = BigDecimal
 
 object Num:
   def apply(d: Double): Num = BigDecimal(d)
+
   def apply(d: Int): Num = d.toDouble
+
   def apply(d: Long): Num = BigDecimal(d)
+
   def apply(d: BigInt): Num = BigDecimal(d)
 
-extension(num: Num)
+extension (num: Num)
   def toInt: Int = num.toInt
 
 implicit def int2num(num: Int): Num = Num(num)
@@ -33,40 +37,45 @@ def `=`(x: Num, y: Num): Boolean = x == y
 @targetName("plus")
 def +(x: Num, y: Num): Num = x + y
 @targetName("plus")
-def +(x: Num, nums: Num*): Num =
-  // TODO: lisp it
-  x + nums.sum
+def +(x: Num, nums: Num*): Num = x + nums.sum // TODO: lisp it
 @targetName("minus")
 def -(x: Num, y: Num): Num = x - y
+@targetName("minus")
+def -(x: Num, nums: Num*): Num = x - nums.sum
 @targetName("times")
 def *(x: Num, y: Num): Num = x * y
 @targetName("times")
-def *(x: Num, nums: Num*): Num =
-  // TODO: lisp it
-  x * nums.product
+def *(x: Num, nums: Num*): Num = x * nums.product // TODO: lisp it
 @targetName("divide")
 def /(x: Num, y: Num): Num = x / y
 @targetName("remainder")
 def %(x: Num, y: Num): Num = x % y
 //  (x + 0.5).toLong % (y + 0.5).toLong
 
+def max(x: Num, y: Num): Num = x.max(y)
+def max(x: Num, nums: Num*): Num = nums.fold(x)(_.max(_))
+def min(x: Num, y: Num): Num = x.min(y)
+def min(x: Num, nums: Num*): Num = nums.fold(x)(_.min(_))
+def average(x: Num, y: Num): Num = /(`+`(x, y), 2)
+def average(x: Num, nums: Num*): Num = /(`+`(x, nums*), inc(nums.size))
+
 @targetName("negative")
 def -(x: Num): Num = -x
+def inc(x: Num): Num = `+`(x, 1)
+def dec(x: Num): Num = `-`(x, 1)
 
 def abs(x: Num): Num =
   if (>(x, 0)) x
   else `-`(x)
 
-def square(x: Num): Num = x * x
+def square(x: Num): Num = *(x, x)
+def cube(x: Num): Num = *(x, x, x)
 
-def average(x: Num, y: Num): Num =
-  /(`+`(x, y), 2)
+def even(n: Num): Boolean = `=`(%(n, 2), 0)
+def odd(n: Num): Boolean = `=`(%(n, 2), 1)
 
-def even(n: Num): Boolean =
-  `=`(%(n, 2), 0)
-
-def odd(n: Num): Boolean =
-  `=`(%(n, 2), 1)
+def positive(n: Num): Boolean = >(n, 0)
+def negative(n: Num): Boolean = <(n, 0)
 
 def expt(b: Num, n: Num): Num =
   @tailrec
@@ -76,20 +85,6 @@ def expt(b: Num, n: Num): Num =
     else fast_expt(b, `-`(n, 1), *(b, a))
 
   fast_expt(b, n, 1)
-
-def sqrt(x: Num): Num =
-  def good_enough(guess: Num, x: Num): Boolean =
-    <(abs(`-`(square(guess), x)), 0.001)
-
-  def improve(guess: Num): Num =
-    average(guess, /(x, guess))
-
-  @tailrec
-  def sqrt_iter(guess: Num): Num =
-    if (good_enough(guess, x)) guess
-    else sqrt_iter(improve(guess))
-
-  sqrt_iter(1)
 
 def divides(a: Num, b: Num): Boolean =
   `=`(%(b, a), 0)
@@ -111,3 +106,15 @@ def gcd(a: Num, b: Num): Num =
 
 def random(x: Num): Num =
   ThreadLocalRandom.current().nextLong(x.toLong)
+
+def random(from: Num, to: Num): Num =
+  ThreadLocalRandom.current().nextLong(from.toLong, to.toLong)
+
+def ceiling(x: Num): Num = x.setScale(0, RoundingMode.CEILING)
+def flooring(x: Num): Num = x.setScale(0, RoundingMode.FLOOR)
+
+def exact2inexact(x: Num): Num = x // TODO:
+def inexact2exact(x: Num): Num = x // TODO:
+
+def sin(x: Num): Num = math.sin(x.toDouble)
+def cos(x: Num): Num = math.cos(x.toDouble)
