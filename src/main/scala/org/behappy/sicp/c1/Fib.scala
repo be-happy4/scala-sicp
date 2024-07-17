@@ -4,7 +4,7 @@ import org.behappy.sicp.lang.*
 
 import scala.annotation.tailrec
 
-object Fib extends App:
+object Fib:
   def fib_tree(n: Num): Num =
     if (`=`(n, 0)) 0
     else if (`=`(n, 1)) 1

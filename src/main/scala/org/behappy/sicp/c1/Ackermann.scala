@@ -4,7 +4,7 @@ import org.behappy.sicp.lang.*
 import org.behappy.sicp.lang.int2num
 
 
-object Ackermann extends App:
+object Ackermann:
   def A(x: Num, y: Num): Num =
     if (`=`(y, 0)) 0
     else if (`=`(x, 0)) *(2, y)

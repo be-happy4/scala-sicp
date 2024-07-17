@@ -6,6 +6,9 @@ import scala.language.implicitConversions
 import scala.math.BigDecimal.RoundingMode
 
 opaque type Num = BigDecimal
+type NumFun = UnaryOp[Num]
+type NumPre = Pre[Num]
+type NumBiPre = BiPre[Num, Num]
 
 object Num:
   def apply(d: Double): Num = BigDecimal(d)
@@ -22,6 +25,9 @@ extension (num: Num)
 implicit def int2num(num: Int): Num = Num(num)
 implicit def long2num(num: Long): Num = Num(num)
 implicit def float2num(num: Double): Num = Num(num)
+
+def E: Num = math.E
+def PI: Num = math.Pi
 
 @targetName("gt")
 def >(x: Num, y: Num): Boolean = x > y
@@ -85,6 +91,13 @@ def expt(b: Num, n: Num): Num =
     else fast_expt(b, `-`(n, 1), *(b, a))
 
   fast_expt(b, n, 1)
+
+def log2(b: Num): Num =
+  log(b, 2)
+
+def log(b: Num, n: Num = E): Num =
+  // TODO: lisp it. precise it
+  math.log(b.toDouble) / math.log(n.toDouble)
 
 def divides(a: Num, b: Num): Boolean =
   `=`(%(b, a), 0)

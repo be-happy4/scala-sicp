@@ -5,7 +5,7 @@ import org.behappy.sicp.lang.*
 import scala.annotation.tailrec
 
 
-object Sum extends App:
+object Sum:
   def filtered_accumulate(combiner: (Num, Num) => Num,
                           null_value: Num, predicate: Num => Boolean,
                           term: Num => Num, a: Num,
@@ -57,9 +57,10 @@ object Sum extends App:
     if (not(even(n))) error("n can't be odd")
     else *(/(h, 3), sum(term, exact2inexact(0), inc, n))
 
-  println(`*`(8, pi_sum(1, 1000)))
-  println(integral(cube, 0, 1, 0.01))
-  println(integral(cube, 0, 1, 0.001))
-  println(simpson(cube, 0, 1, 100))
-  println(simpson(cube, 0, 1, 1000))
+  def main(args: Array[String]): Unit =
+    println(`*`(8, pi_sum(1, 1000)))
+    println(integral(cube, 0, 1, 0.01))
+    println(integral(cube, 0, 1, 0.001))
+    println(simpson(cube, 0, 1, 100))
+    println(simpson(cube, 0, 1, 1000))
 

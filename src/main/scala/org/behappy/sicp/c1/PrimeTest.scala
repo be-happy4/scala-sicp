@@ -8,7 +8,7 @@ import scala.annotation.tailrec
  * @see [[https://en.wikipedia.org/wiki/Fermat_primality_test]]
  * @see [[https://en.wikipedia.org/wiki/Carmichael_number]]
  */
-object PrimeTest extends App:
+object PrimeTest:
   def prime(n: Num): Boolean =
     @tailrec
     def find_divisor(n: Num, test_divisor: Num): Num =
