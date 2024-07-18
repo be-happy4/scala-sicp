@@ -1,6 +1,7 @@
 package org.behappy.sicp.c1
 
 import org.behappy.sicp.lang.*
+import org.behappy.sicp.lang.Num.*
 
 import scala.annotation.tailrec
 

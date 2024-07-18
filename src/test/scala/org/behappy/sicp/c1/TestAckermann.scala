@@ -2,12 +2,13 @@ package org.behappy.sicp.c1
 
 import org.behappy.sicp.c1.Ackermann.*
 import org.behappy.sicp.lang.*
+import org.behappy.sicp.lang.Num.*
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.annotation.tailrec
 
 def to(start: Num, end: Num): Range =
-  Range(start.toInt, end.toInt)
+  Range(start.value.toInt, end.value.toInt)
 
 def test_range(f1: Num => Num, f2: Num => Num, range: Range = to(1, 10)) =
   for i <- range do

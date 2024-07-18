@@ -1,10 +1,18 @@
 package org.behappy.sicp.lang
 
-import scala.annotation.tailrec
+import org.behappy.sicp.lang.Num.{Num, dec}
 
-type UnaryOp[T] = T => T
-type Pre[T] = T => Boolean
-type BiPre[T1, T2] = (T1, T2) => Boolean
+import scala.annotation.{tailrec, targetName}
+
+type Pre1[T] = T => Boolean
+type Pre2[T1, T2] = (T1, T2) => Boolean
+type Con1[T] = T => Unit
+type Con2[T1, T2] = (T1, T2) => Unit
+type Fun1[T, R] = T => R
+type Fun2[T1, T2, R] = (T1, T2) => R
+type Sup[R] = () => R
+type Op1[T] = Fun1[T, T]
+type Op2[T] = Fun2[T, T, T]
 
 def identify[T](x: T): T = x
 
@@ -13,16 +21,18 @@ def error(msg: String, args: Any*): Nothing =
   println(args.zipWithIndex.map((i, v) => f"$i=>$v").mkString("[", ",", "]"))
   throw RuntimeException(msg)
 
+@targetName("equals")
+def `=`[T](x: T, y: T): Boolean = x == y
 
-def double[T](f: UnaryOp[T]): UnaryOp[T] =
+def double[T](f: Op1[T]): Op1[T] =
   x => f(f(x))
 
-def compose[T](f: UnaryOp[T], g: UnaryOp[T]): UnaryOp[T] =
+def compose[T](f: Op1[T], g: Op1[T]): Op1[T] =
   x => f(g(x))
 
-def repeated[T](f: UnaryOp[T], n: Num): UnaryOp[T] =
+def repeated[T](f: Op1[T], n: Num): Op1[T] =
   @tailrec
-  def iter(result: UnaryOp[T] = identify, c: Num = n): UnaryOp[T] =
+  def iter(result: Op1[T] = identify, c: Num = n): Op1[T] =
     if (`=`(c, 0)) result
     else iter(compose(f, result), dec(c))
 

@@ -1,5 +1,6 @@
 package org.behappy.sicp.lang
 
+import org.behappy.sicp.lang.Num.*
 import org.scalatest.Assertions.*
 import org.scalatest.funsuite.AnyFunSuite
 

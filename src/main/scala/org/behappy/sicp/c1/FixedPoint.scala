@@ -2,12 +2,13 @@ package org.behappy.sicp.c1
 
 import org.behappy.sicp.c1.Newton.dx
 import org.behappy.sicp.lang.*
+import org.behappy.sicp.lang.Num.*
 
 import scala.annotation.tailrec
 
 object FixedPoint:
   @tailrec
-  def search(f: NumFun, neg_point: Num, pos_point: Num): Num =
+  def search(f: NumOp1, neg_point: Num, pos_point: Num): Num =
     def close_enough(x: Num, y: Num, delta: Num = 0.001): Boolean =
       <(abs(`-`(x, y)), delta)
 
@@ -19,7 +20,7 @@ object FixedPoint:
       else if (negative(test_value)) search(f, midpoint, pos_point)
       else midpoint
 
-  def half_interval_method(f: NumFun, a: Num, b: Num): Num =
+  def half_interval_method(f: NumOp1, a: Num, b: Num): Num =
     val a_value = f(a)
     val b_value = f(b)
     if (and(negative(a_value), positive(b_value))) search(f, a, b)
@@ -28,7 +29,7 @@ object FixedPoint:
 
   def tolerance = 0.00001
 
-  def fixed_point(f: NumFun, first_guess: Num): Num =
+  def fixed_point(f: NumOp1, first_guess: Num): Num =
     def close_enough(v1: Num, v2: Num): Boolean =
       <(abs(`-`(v1, v2)), tolerance)
 
@@ -39,7 +40,7 @@ object FixedPoint:
   def sqrt(x: Num): Num =
     fixed_point(y => average(y, /(x, y)), 1.0)
 
-  def cont_frac(n: NumFun, d: NumFun, k: Num): Num =
+  def cont_frac(n: NumOp1, d: NumOp1, k: Num): Num =
     @tailrec
     def iter(i: Num = k, result: Num = 0): Num =
       if (`=`(i, 0)) result
@@ -47,33 +48,33 @@ object FixedPoint:
 
     iter()
 
-  def average_damp(f: NumFun): NumFun =
+  def average_damp(f: NumOp1): NumOp1 =
     x => average(x, f(x))
 
   def cube_root(x: Num): Num =
     fixed_point(average_damp(y => `/`(x, y)), 1.0)
 
   def fixed_point_of_transform
-  (g: NumFun, transform: NumFun => NumFun, guess: Num): Num =
+  (g: NumOp1, transform: NumOp1 => NumOp1, guess: Num): Num =
     fixed_point(transform(g), guess)
 
-  def smooth(f: NumFun): NumFun =
+  def smooth(f: NumOp1): NumOp1 =
     x => average(f(`-`(x, dx)), f(x), f(`+`(x, dx)))
 
-  def average_damp_n_times(f: NumFun, n: Num): NumFun =
+  def average_damp_n_times(f: NumOp1, n: Num): NumOp1 =
     repeated(average_damp, n)(f)
 
-  def damped_nth_root(n: Num, damp_times: Num): NumFun =
+  def damped_nth_root(n: Num, damp_times: Num): NumOp1 =
     x => fixed_point(
       average_damp_n_times(
         y => /(x, expt(y, dec(n))),
         damp_times),
       1.0)
 
-  def nth_root(n: Num): NumFun =
+  def nth_root(n: Num): NumOp1 =
     damped_nth_root(n, log2(n))
 
-  def iterative_improve(close_enough: NumBiPre, improve: NumFun): NumFun =
+  def iterative_improve(close_enough: NumPre2, improve: NumOp1): NumOp1 =
     @tailrec
     def `try`(guess: Num): Num =
       val next = improve(guess)

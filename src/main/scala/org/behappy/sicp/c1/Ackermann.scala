@@ -1,7 +1,7 @@
 package org.behappy.sicp.c1
 
 import org.behappy.sicp.lang.*
-import org.behappy.sicp.lang.int2num
+import org.behappy.sicp.lang.Num.*
 
 
 object Ackermann:

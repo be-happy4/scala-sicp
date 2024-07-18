@@ -35,7 +35,7 @@ class TestPrimeTest extends AnyFunSuite:
     assert(miller_rabin_test(97))
     assert(miller_rabin_test(197))
     assert(!miller_rabin_test(1127))
-    assert(miller_rabin_test(274876858367L))
+    assert(miller_rabin_test(274876858367L, 1000))
 
   test("test carmichael for Miller-Rabin-test"):
     assert(!miller_rabin_test(561))
