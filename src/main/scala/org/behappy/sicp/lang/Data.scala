@@ -8,12 +8,13 @@ private trait Pair0[A, B]:
 
 opaque type Pair[A, B] = Pair0[A, B]
 
-def cons[A, B](a: A, b: B): Pair[A, B] = new Pair[A, B]:
-  override def apply[R](f: Fun2[A, B, R]): R = f(a, b)
+object Pair:
+  def apply[A, B](a: A, b: B): Pair[A, B] = new Pair[A, B]:
+    override def apply[R](f: Fun2[A, B, R]): R = f(a, b)
 
-def car[A, B](x: Pair[A, B]): A =
-  x((a, _) => a)
+  extension[A, B] (x: Pair[A, B])
+    def car: A =
+      x((a, _) => a)
 
-def cdr[A, B](x: Pair[A, B]): B =
-  x((_, b) => b)
-
+    def cdr: B =
+      x((_, b) => b)

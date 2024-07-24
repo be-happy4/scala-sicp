@@ -1,6 +1,8 @@
 package org.behappy.sicp.lang
 
-import org.behappy.sicp.lang.Num.{Num, dec}
+import org.behappy.sicp.lang.FInt.FInt
+import org.behappy.sicp.lang.FNum.*
+import org.behappy.sicp.lang.int2FNum
 
 import scala.annotation.{tailrec, targetName}
 
@@ -21,19 +23,16 @@ def error(msg: String, args: Any*): Nothing =
   println(args.zipWithIndex.map((i, v) => f"$i=>$v").mkString("[", ",", "]"))
   throw RuntimeException(msg)
 
-@targetName("equals")
-def `=`[T](x: T, y: T): Boolean = x == y
-
 def double[T](f: Op1[T]): Op1[T] =
   x => f(f(x))
 
 def compose[T](f: Op1[T], g: Op1[T]): Op1[T] =
   x => f(g(x))
 
-def repeated[T](f: Op1[T], n: Num): Op1[T] =
+def repeated[T](f: Op1[T], n: FInt): Op1[T] =
   @tailrec
-  def iter(result: Op1[T] = identify, c: Num = n): Op1[T] =
-    if (`=`(c, 0)) result
-    else iter(compose(f, result), dec(c))
+  def iter(result: Op1[T] = identify, c: FInt = n): Op1[T] =
+    if (c equals 0) result
+    else iter(compose(f, result), c.dec)
 
   iter()

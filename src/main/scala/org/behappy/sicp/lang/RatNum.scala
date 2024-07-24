@@ -5,46 +5,40 @@ import org.behappy.sicp.lang.FInt.*
 
 import scala.language.implicitConversions
 
+opaque type RatNum = Pair[FInt, FInt]
 
 object RatNum:
-  opaque type RatNum = Pair[FInt, FInt]
+  def apply(n: FInt, d: FInt): RatNum =
+    val g = n gcd d
+    Pair(n / g, d / g)
 
-  def make_rat(n: FInt, d: FInt): RatNum =
-    val g = gcd(n, d)
-    cons(/(n, g), /(d, g))
+extension (x: RatNum)
+  private def toPair: Pair[FInt, FInt] = x
+  
+  def numer: FInt = toPair.car
 
-  def numer(x: RatNum): FInt =
-    car(x)
+  def denom: FInt = toPair.cdr
 
-  def denom(x: RatNum): FInt =
-    cdr(x)
+  def add_rat(y: RatNum): RatNum =
+    RatNum(
+      x.numer * y.denom + y.numer * x.denom,
+      x.denom * y.denom)
 
-  def add_rat(x: RatNum, y: RatNum): RatNum =
-    make_rat(
-      `+`(
-        *(numer(x), denom(y)),
-        *(numer(y), denom(x))),
-      *(denom(x), denom(y)))
+  def sub_rat(y: RatNum): RatNum =
+    RatNum(
+      x.numer * y.denom - y.numer * x.denom,
+      x.denom * y.denom)
 
-  def sub_rat(x: RatNum, y: RatNum): RatNum =
-    make_rat(
-      `-`(
-        *(numer(x), denom(y)),
-        *(numer(y), denom(x))),
-      *(denom(x), denom(y)))
+  def mul_rat(y: RatNum): RatNum =
+    RatNum(
+      x.numer * y.numer,
+      x.denom * y.denom)
 
-  def mul_rat(x: RatNum, y: RatNum): RatNum =
-    make_rat(
-      *(numer(x), numer(y)),
-      *(denom(x), denom(y)))
+  def div_rat(y: RatNum): RatNum =
+    RatNum(
+      x.numer * y.denom,
+      x.denom * y.numer)
 
-  def div_rat(x: RatNum, y: RatNum): RatNum =
-    make_rat(
-      *(numer(x), denom(y)),
-      *(denom(x), numer(y)))
+  def eq(y: RatNum): Boolean = x.numer * y.denom == x.denom * y.numer
 
-  def equal_rat(x: RatNum, y: RatNum): Boolean =
-    `=`(*(numer(x), denom(y)), *(denom(x), numer(y)))
-
-  def print_rat(x: RatNum): Printer =
-    display(numer(x))("/")(denom(x))
+  def toString: String = f"${x.numer}/${x.denom}"
