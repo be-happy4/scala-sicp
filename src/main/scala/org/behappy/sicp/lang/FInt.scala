@@ -47,15 +47,13 @@ object FInt:
     @targetName("le")
     def <=(y: FInt): Boolean = x <= y
 
-    def equals(obj: Any): Boolean =
+    def eq(obj: Any): Boolean =
       obj match
         case n: FInt => x == n
         case n: Number => x == n
         case _ => false
 
-    def hashCode(): Int = x.hashCode()
-    
-    def ne(obj: Any): Boolean = !equals(obj)
+    def ne(obj: Any): Boolean = !eq(obj)
 
     @targetName("plus")
     infix def +(y: FInt): FInt = x + y

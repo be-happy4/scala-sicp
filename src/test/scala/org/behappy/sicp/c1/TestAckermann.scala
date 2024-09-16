@@ -27,7 +27,7 @@ def tetration(b: FInt, n: FInt): FInt =
 
 class TestAckermann extends AnyFunSuite:
   test("test A"):
-    assert(1024 equals A(1, 10))
+    assert(int2FInt(1024) equals A(1, 10))
     assert(65536 equals A(2, 4))
     assert(65536 equals A(3, 3))
 

@@ -5,15 +5,15 @@ import org.behappy.sicp.lang.FInt.*
 
 import scala.language.implicitConversions
 
-opaque type RatNum = Pair[FInt, FInt]
+opaque type RatNum = FPair[FInt, FInt]
 
 object RatNum:
   def apply(n: FInt, d: FInt): RatNum =
     val g = n gcd d
-    Pair(n / g, d / g)
+    FPair(n / g, d / g)
 
 extension (x: RatNum)
-  private def toPair: Pair[FInt, FInt] = x
+  private def toPair: FPair[FInt, FInt] = x
   
   def numer: FInt = toPair.car
 
