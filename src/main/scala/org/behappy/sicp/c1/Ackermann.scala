@@ -10,8 +10,8 @@ object Ackermann:
     else if (x equals 0) y * 2
     else if (y equals 1) 2
     else A(
-      x.dec,
-      A(x, y.dec))
+      x - 1,
+      A(x, y - 1))
 
   def f(n: FInt): FInt = A(0, n) // 2n
   def g(n: FInt): FInt = A(1, n) // 2^n

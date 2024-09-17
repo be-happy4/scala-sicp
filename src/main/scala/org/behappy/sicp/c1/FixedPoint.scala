@@ -44,7 +44,7 @@ object FixedPoint:
     @tailrec
     def iter(i: FNum = k, result: FNum = 0): FNum =
       if (i equals 0) result
-      else iter(i.dec, n(i) / result + d(i))
+      else iter(i - 1, n(i) / result + d(i))
 
     iter()
 
@@ -67,7 +67,7 @@ object FixedPoint:
   def damped_nth_root(n: FNum, damp_times: FInt): NumOp1 =
     x => fixed_point(
       average_damp_n_times(
-        y => x / y.expt(n.dec),
+        y => x / y.pow((n - 1).toInt),
         damp_times),
       1.0)
 

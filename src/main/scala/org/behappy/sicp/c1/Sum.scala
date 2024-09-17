@@ -31,10 +31,10 @@ object Sum:
     accumulate(_ * _, 1, term, a, next, b)
 
   def sum_integers(a: FNum, b: FNum): FNum =
-    sum(identify, a, inc, b)
+    sum(identify, a, _ + 1, b)
 
   def sum_cubes(a: FNum, b: FNum): FNum =
-    sum(cube, a, inc, b)
+    sum(cube, a, _ + 1, b)
 
   def pi_sum(a: FNum, b: FNum): FNum =
     sum(x => 1.0 / x * x * 2, a, x => x + 4, b)
@@ -56,7 +56,7 @@ object Sum:
     def term: FNum => FNum = k => (factor(k) * y(k))
 
     if (n.isOdd) error("n can't be odd")
-    else h / 3 * sum(term, exact2inexact(0), inc, n)
+    else h / 3 * sum(term, 0, _ + 1, n)
 
   def main(args: Array[String]): Unit =
     println(8 * pi_sum(1, 1000))

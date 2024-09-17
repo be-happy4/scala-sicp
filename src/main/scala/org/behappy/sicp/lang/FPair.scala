@@ -4,6 +4,8 @@ package org.behappy.sicp.lang
 trait FPair[+A, +B]:
   def car: A
   def cdr: B
+  def head: A = car
+  def tail: B = cdr
 
 
 private class PairImpl[+A, +B](

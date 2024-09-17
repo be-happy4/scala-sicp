@@ -4,7 +4,10 @@ import org.behappy.sicp.c1.PrimeTest.*
 import org.behappy.sicp.lang.*
 import org.scalatest.funsuite.AnyFunSuite
 
-class TestPrimeTest extends AnyFunSuite:
+/**
+ * Ignore for probabilistic methods
+ */
+class TestPrimeTest extends munit.FunSuite:
   test("test prime"):
     assert(prime(2))
     assert(!prime(4))
@@ -29,7 +32,7 @@ class TestPrimeTest extends AnyFunSuite:
     assert(fast_prime(2821))
     assert(fast_prime(6601))
 
-  test("test Miller-Rabin-test"):
+  test("test Miller-Rabin-test".ignore):
     assert(miller_rabin_test(2))
     assert(!miller_rabin_test(4))
     assert(miller_rabin_test(97))

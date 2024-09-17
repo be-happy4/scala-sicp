@@ -1,7 +1,9 @@
 package org.behappy.sicp.c1
 
 import org.behappy.sicp.lang.*
-import org.behappy.sicp.lang.FNum.*
+import org.behappy.sicp.lang.FInt.FInt
+import org.behappy.sicp.lang.FInt.square
+import org.behappy.sicp.lang.FInt.random
 
 import scala.annotation.tailrec
 
@@ -10,50 +12,53 @@ import scala.annotation.tailrec
  * @see [[https://en.wikipedia.org/wiki/Carmichael_number]]
  */
 object PrimeTest:
-  def prime(n: FNum): Boolean =
+  def prime(n: FInt): Boolean =
     @tailrec
-    def find_divisor(n: FNum, test_divisor: FNum): FNum =
+    def find_divisor(n: FInt, test_divisor: FInt): FInt =
       if (test_divisor.square > n) n
-      else if (test_divisor divides n) test_divisor
-      else find_divisor(n, test_divisor.inc)
+      else if (n % test_divisor == 0) test_divisor
+      else find_divisor(n, test_divisor + 1)
 
-    def smallest_divisor(n: FNum) =
+    def smallest_divisor(n: FInt) =
       find_divisor(n, 2)
 
-    n equals smallest_divisor(n)
+    n == smallest_divisor(n)
 
   @tailrec
-  def fast_prime(n: FNum, times: FNum = 20): Boolean =
-    def expmod(base: FNum, exp: FNum, m: FNum): FNum =
-      if (exp equals 0) 1
-      else if (isEven(exp)) expmod(base, exp / 2, m).square % m
-      else base * expmod(base, exp.dec, m) % m
+  def fast_prime(n: FInt, times: FInt = 20): Boolean =
+    def expmod(base: FInt, exp: FInt, m: FInt): FInt =
+      if (exp == 0) 1
+      else if (exp % 2 == 0) expmod(base, exp / 2, m).square % m
+      else base * expmod(base, exp - 1, m) % m
 
-    def fermat_test(n: FNum): Boolean =
-      def try_it(a: FNum) = expmod(a, n, n) equals a
+    def fermat_test(n: FInt): Boolean =
+      def try_it(a: FInt) = expmod(a, n, n) equals a
 
       try_it(random(1, n))
 
     if (times equals 0) true
-    else if (fermat_test(n)) fast_prime(n, times.dec)
+    else if (fermat_test(n)) fast_prime(n, times - 1)
     else false
 
-  def miller_rabin_test(n: FNum, times: FNum = 0): Boolean =
-    def expmod(base: FNum, exp: FNum, m: FNum): FNum =
-      if (exp equals 0) 1
+  /**
+   * Probabilistic methods
+   */
+  def miller_rabin_test(n: FInt, times: FInt = 0): Boolean =
+    def expmod(base: FInt, exp: FInt, m: FInt): FInt =
+      if (exp == 0) 1
       else if (nontrivial_square_root(base, m)) 0
-      else if (isEven(exp)) expmod(base, exp / 2, m).square % m
-      else base * expmod(base, exp.dec, m) % m
+      else if (exp % 2 == 0) expmod(base, exp / 2, m).square % m
+      else base * expmod(base, exp - 1, m) % m
 
-    def nontrivial_square_root(a: FNum, n: FNum): Boolean =
-      (a ne 1) && (a ne n.dec) && (1 equals a.square % n)
+    def nontrivial_square_root(a: FInt, n: FInt): Boolean =
+      (a != 1) && (a != n - 1) && (1 == a.square % n)
 
     @tailrec
-    def test_iter(n: FNum, times: FNum): Boolean =
+    def test_iter(n: FInt, times: FInt): Boolean =
       if (times equals 0) true
-      else if (expmod(random(1, n), n.dec, n) equals 1)
-        test_iter(n, dec(times))
+      else if (expmod(random(1, n), n - 1, n) equals 1)
+        test_iter(n, times - 1)
       else false
 
-    if (times equals 0) test_iter(n, ceiling(n / 2))
+    if (times equals 0) test_iter(n, (n + 1) / 2)
     else test_iter(n, times)

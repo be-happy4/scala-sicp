@@ -1,8 +1,6 @@
 package org.behappy.sicp.lang
 
 import org.behappy.sicp.lang.FInt.FInt
-import org.behappy.sicp.lang.FNum.*
-import org.behappy.sicp.lang.int2FNum
 
 import scala.annotation.{tailrec, targetName}
 
@@ -33,6 +31,6 @@ def repeated[T](f: Op1[T], n: FInt): Op1[T] =
   @tailrec
   def iter(result: Op1[T] = identify, c: FInt = n): Op1[T] =
     if (c equals 0) result
-    else iter(compose(f, result), c.dec)
+    else iter(compose(f, result), c - 1)
 
   iter()
