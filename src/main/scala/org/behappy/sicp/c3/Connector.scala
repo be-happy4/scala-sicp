@@ -3,9 +3,10 @@ package org.behappy.sicp.c3
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.collection.mutable.HashSet
+import scala.compiletime.uninitialized
 
 case class Connector[T: Numeric]():
-  var value: T = _
+  var value: T = uninitialized
   var informant: Option[Constraint] = None
   val constraints: mutable.Set[Constraint] = mutable.HashSet[Constraint]()
 

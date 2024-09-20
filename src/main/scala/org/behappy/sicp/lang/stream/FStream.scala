@@ -16,6 +16,14 @@ object FStream:
       already.get
 
   def empty[A]: FStream[A] = LazyList.empty[A]
+
+  private def interleave[A](s1: FStream[A], s2: FStream[A]): FStream[A] =
+    if s1.isEmpty then s2
+    else FStream(s1.head, interleave(s2, s1.tail))
+
+  def pairs[A](s: FStream[A], t: FStream[A]): FStream[(A, A)] =
+    FStream((s.head, t.head),
+      interleave(t.tail.map((s.head, _)), pairs(s.tail, t.tail)))
 /**
  * {{{
  * trait FStream[+A] extends FList[A]
